@@ -12,7 +12,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import PassiveAggressiveClassifier, SGDClassifier
 from sklearn.feature_extraction.text import TfidfVectorizer
 import helper
-from config import CLASSCOLS, MODEL, NORMTEXTCOL, TEXTCOL
+import config
 
 PARTITIONLEN = 100
 NUMCORES = 3
@@ -30,7 +30,7 @@ def print_verbose(line: str) -> None:
 
 def normalize_data(data: List[numpy.ndarray]) -> List[numpy.ndarray]:
     """ normalize_data """
-    data[NORMTEXTCOL] = data[TEXTCOL].apply(helper.normalize_str)
+    data[config.NORMTEXTCOL] = data[config.TEXTCOL].apply(helper.normalize_str)
     return data
 
 
@@ -60,22 +60,22 @@ def main():
 
     print_verbose("normalization done:\t{:0.3f}s".format((time() - t0)))
     t0 = time()
-    X_learn = VECTORIZER.fit_transform(data[NORMTEXTCOL])
+    X_learn = VECTORIZER.fit_transform(data[config.NORMTEXTCOL])
     print_verbose("fit done\t{:0.3f}s".format((time() - t0)))
-    MODEL["Tfidf"] = VECTORIZER
+    config.MODEL["Tfidf"] = VECTORIZER
     for classifier_name, classifier in CLASSIFIERS:
-        MODEL[classifier_name] = {}
+        config.MODEL[classifier_name] = {}
         print("="*40)
         print(classifier_name)
         print(classifier)
-        for classcol in CLASSCOLS:
+        for classcol in config.CLASSCOLS:
             print("training on\t{:s}".format(classcol))
             t0 = time()
             y_learn = numpy.array(data[classcol])
             classifier.fit(X_learn, y_learn)
             print_verbose("training done\t{:0.3f}s".format((time() - t0)))
-            MODEL[classifier_name][classcol] = copy.copy(classifier)
-    helper.save_pkl(MODEL, pkl_filename)
+            config.MODEL[classifier_name][classcol] = copy.copy(classifier)
+    helper.save_pkl(config.MODEL, pkl_filename)
 
 if __name__ == "__main__":
     main()

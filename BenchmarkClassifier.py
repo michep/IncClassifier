@@ -6,7 +6,7 @@ from time import time
 from sklearn import metrics
 import numpy
 import helper
-from config import CLASSCOLS, NORMTEXTCOL, TEXTCOL, CLASSIFIER
+import config
 
 
 def benchmark_single(clf, X_test, y_test):
@@ -21,7 +21,7 @@ def benchmark_single(clf, X_test, y_test):
 def benchmark_multiple(model, X_test, y_test_mul):
     """ benchmark_multiple """
     pred = []
-    for classcol in CLASSCOLS:
+    for classcol in config.CLASSCOLS:
         pred.append(model[classcol].predict(X_test))
 
     res_mul = numpy.array(pred).transpose()
@@ -43,11 +43,11 @@ def main():
     print("model loaded:\t{:0.3f}s".format((time() - t0)))
     test = helper.load_csv(csv_filename)
     t0 = time()
-    test[NORMTEXTCOL] = test[TEXTCOL].apply(helper.normalize_str)
+    test[config.NORMTEXTCOL] = test[config.TEXTCOL].apply(helper.normalize_str)
     print("normalization done:\t{:0.3f}s".format((time() - t0)))
     vectorizer = MODEL["Tfidf"]
-    X_test = vectorizer.transform(test[NORMTEXTCOL])
-    benchmark_multiple(MODEL[CLASSIFIER], X_test, test[list(CLASSCOLS)])
+    X_test = vectorizer.transform(test[config.NORMTEXTCOL])
+    benchmark_multiple(MODEL[config.CLASSIFIER], X_test, test[list(config.CLASSCOLS)])
 
 
 if __name__ == "__main__":

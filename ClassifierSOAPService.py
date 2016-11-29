@@ -7,19 +7,19 @@ from spyne import Application, rpc, ServiceBase, Unicode
 from spyne.protocol.soap import Soap11
 from spyne.server.wsgi import WsgiApplication
 import helper
-from config import CLASSIFIER, CLASSCOLS
+import config
 
 
 class EmailIncClassifierService(ServiceBase):
 
-    @rpc(Unicode, _returns=(Unicode, Unicode, Unicode, Unicode), _out_variable_names=CLASSCOLS)
+    @rpc(Unicode, _returns=(Unicode, Unicode, Unicode, Unicode), _out_variable_names=config.CLASSCOLS)
     def classify(self, text):
         """ EmailIncClassifierService """
         normtext = helper.normalize_str(text)
         x = VECTORIZER.transform([normtext])
-        model = MODEL[CLASSIFIER]
+        model = MODEL[config.CLASSIFIER]
         pred = []
-        for classcol in CLASSCOLS:
+        for classcol in config.CLASSCOLS:
             pred.append(model[classcol].predict(x))
         return pred[0][0], pred[1][0], pred[2][0], pred[3][0]
 

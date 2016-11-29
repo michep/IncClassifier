@@ -7,7 +7,7 @@ from xml.sax.saxutils import escape
 import numpy
 import helper
 from suds.client import Client
-from config import TEXTCOL, NORMTEXTCOL, CLASSCOLS
+import config
 
 
 def benchmark_soap_multiple(url, X_test_text, y_test_mul):
@@ -33,9 +33,9 @@ def main():
     service_url = args.url
     test = helper.load_csv(csv_filename)
     t0 = time()
-    test[NORMTEXTCOL] = test[TEXTCOL].apply(helper.normalize_str)
+    test[config.NORMTEXTCOL] = test[config.TEXTCOL].apply(helper.normalize_str)
     print("normalization done:\t{:0.3f}s".format((time() - t0)))
-    benchmark_soap_multiple(service_url, test[NORMTEXTCOL], test[list(CLASSCOLS)])
+    benchmark_soap_multiple(service_url, test[config.NORMTEXTCOL], test[list(config.CLASSCOLS)])
 
 
 if __name__ == "__main__":
