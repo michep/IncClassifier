@@ -12,16 +12,11 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import PassiveAggressiveClassifier, SGDClassifier
 from sklearn.feature_extraction.text import TfidfVectorizer
 import helper
+from config import CLASSCOLS, MODEL, NORMTEXTCOL, TEXTCOL
 
-
-MODEL = {}
-VERBOSE = False
 PARTITIONLEN = 100
 NUMCORES = 3
-TEXTCOL = "Text"
-NORMTEXTCOL = "NormText"
-CLASSCOLS = ("OperCat", "ProdCat", "Impact", "Type")
-VECTORIZER = TfidfVectorizer()
+VERBOSE = None
 CLASSIFIERS = (("PassiveAggressive", PassiveAggressiveClassifier(n_jobs=-1)),
                ("SGD", SGDClassifier(n_jobs=-1)),
                ("RandomForest", RandomForestClassifier(n_jobs=-1)))
@@ -42,6 +37,7 @@ def normalize_data(data: List[numpy.ndarray]) -> List[numpy.ndarray]:
 def main():
     """ main """
     global VERBOSE
+    VECTORIZER = TfidfVectorizer()
     apar = argparse.ArgumentParser(description="Learn Incident Classifier")
     apar.add_argument("-f", "--file", required=True)
     apar.add_argument("-o", "--out")

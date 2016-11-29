@@ -7,14 +7,7 @@ from xml.sax.saxutils import escape
 import numpy
 import helper
 from suds.client import Client
-
-
-MODEL = {}
-TEXTCOL = "Text"
-NORMTEXTCOL = "NormText"
-CLASSCOLS = ("OperCat", "ProdCat", "Impact", "Type")
-VECTORIZER = None
-CLASSIFIER = "PassiveAggressive"
+from config import TEXTCOL, NORMTEXTCOL, CLASSCOLS
 
 
 def benchmark_soap_multiple(url, X_test_text, y_test_mul):

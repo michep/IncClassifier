@@ -7,14 +7,7 @@ from spyne import Application, rpc, ServiceBase, Unicode
 from spyne.protocol.soap import Soap11
 from spyne.server.wsgi import WsgiApplication
 import helper
-
-
-MODEL = {}
-TEXTCOL = "Text"
-NORMTEXTCOL = "NormText"
-CLASSCOLS = ("OperCat", "ProdCat", "Impact", "Type")
-VECTORIZER = None
-CLASSIFIER = "PassiveAggressive"
+from config import CLASSIFIER, CLASSCOLS
 
 
 class EmailIncClassifierService(ServiceBase):

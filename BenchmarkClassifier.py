@@ -6,14 +6,7 @@ from time import time
 from sklearn import metrics
 import numpy
 import helper
-
-
-MODEL = {}
-TEXTCOL = "Text"
-NORMTEXTCOL = "NormText"
-CLASSCOLS = ("OperCat", "ProdCat", "Impact", "Type")
-VECTORIZER = None
-CLASSIFIER = "PassiveAggressive"
+from config import CLASSCOLS, NORMTEXTCOL, TEXTCOL, CLASSIFIER
 
 
 def benchmark_single(clf, X_test, y_test):
@@ -39,7 +32,6 @@ def benchmark_multiple(model, X_test, y_test_mul):
 
 def main():
     """ main """
-    global MODEL
     apar = argparse.ArgumentParser(description="Benchmark Incident Classifier")
     apar.add_argument("-m", "--model", required=True)
     apar.add_argument("-f", "--file", required=True)
