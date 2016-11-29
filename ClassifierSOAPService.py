@@ -1,9 +1,13 @@
+"""
+Classifier SOAP Service
+"""
 import logging
 from wsgiref.simple_server import make_server
-from spyne import Application, rpc, ServiceBase, Unicode, AnyDict
+from spyne import Application, rpc, ServiceBase, Unicode
 from spyne.protocol.soap import Soap11
 from spyne.server.wsgi import WsgiApplication
 import helper
+
 
 MODEL = {}
 TEXTCOL = "Text"
@@ -14,10 +18,10 @@ CLASSIFIER = "PassiveAggressive"
 
 
 class EmailIncClassifierService(ServiceBase):
+
     @rpc(Unicode, _returns=(Unicode, Unicode, Unicode, Unicode), _out_variable_names=CLASSCOLS)
-    def classify(ctx, text):
+    def classify(self, text):
         """ EmailIncClassifierService """
-        global VECTORIZER, MODEL
         normtext = helper.normalize_str(text)
         x = VECTORIZER.transform([normtext])
         model = MODEL[CLASSIFIER]
@@ -27,15 +31,14 @@ class EmailIncClassifierService(ServiceBase):
         return pred[0][0], pred[1][0], pred[2][0], pred[3][0]
 
 
-application = Application([EmailIncClassifierService], 'org.michep.inclassifier.soap',
+APPLICATION = Application([EmailIncClassifierService], 'org.michep.inclassifier.soap',
                           in_protocol=Soap11(validator='lxml'),
                           out_protocol=Soap11())
 
-wsgi_application = WsgiApplication(application)
+WSGI_APPLICATION = WsgiApplication(APPLICATION)
 
 
 if __name__ == '__main__':
-
     MODEL = helper.load_pkl("model.pkl")
     VECTORIZER = MODEL["Tfidf"]
 
@@ -45,5 +48,5 @@ if __name__ == '__main__':
     logging.info("listening to http://127.0.0.1:8000")
     logging.info("wsdl is at: http://localhost:8000/?wsdl")
 
-    server = make_server('127.0.0.1', 8000, wsgi_application)
-    server.serve_forever()
+    SERVER = make_server('127.0.0.1', 8000, WSGI_APPLICATION)
+    SERVER.serve_forever()

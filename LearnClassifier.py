@@ -4,8 +4,7 @@ Learn Classifier
 import argparse
 import copy
 import multiprocessing
-from typing import Any, List
-from pprint import pprint
+from typing import List
 from time import time
 import numpy
 import pandas
@@ -42,7 +41,7 @@ def normalize_data(data: List[numpy.ndarray]) -> List[numpy.ndarray]:
 
 def main():
     """ main """
-    global VERBOSE, PARTITIONLEN
+    global VERBOSE
     apar = argparse.ArgumentParser(description="Learn Incident Classifier")
     apar.add_argument("-f", "--file", required=True)
     apar.add_argument("-o", "--out")
