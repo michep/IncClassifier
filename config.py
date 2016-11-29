@@ -1,3 +1,6 @@
+"""
+config module
+"""
 MODEL = {}
 TEXTCOL = "Text"
 NORMTEXTCOL = "NormText"
