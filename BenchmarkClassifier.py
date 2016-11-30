@@ -43,7 +43,7 @@ def main():
     print("model loaded:\t{:0.3f}s".format((time() - t0)))
     test = helper.load_csv(csv_filename)
     t0 = time()
-    test[config.NORMTEXTCOL] = test[config.TEXTCOL].apply(helper.normalize_str)
+    test = helper.normalize_multiproc(test)
     print("normalization done:\t{:0.3f}s".format((time() - t0)))
     vectorizer = MODEL["Tfidf"]
     X_test = vectorizer.transform(test[config.NORMTEXTCOL])

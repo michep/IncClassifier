@@ -11,6 +11,7 @@ import config
 
 
 class EmailIncClassifierService(ServiceBase):
+    """ EmailIncClassifierService """
 
     @rpc(Unicode, _returns=(Unicode, Unicode, Unicode, Unicode), _out_variable_names=config.CLASSCOLS)
     def classify(self, text):

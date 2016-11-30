@@ -3,19 +3,15 @@ Learn Classifier
 """
 import argparse
 import copy
-import multiprocessing
-from typing import List
 from time import time
 import numpy
-import pandas
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import PassiveAggressiveClassifier, SGDClassifier
 from sklearn.feature_extraction.text import TfidfVectorizer
 import helper
 import config
 
-PARTITIONLEN = 100
-NUMCORES = 3
+
 VERBOSE = None
 CLASSIFIERS = (("PassiveAggressive", PassiveAggressiveClassifier(n_jobs=-1)),
                ("SGD", SGDClassifier(n_jobs=-1)),
@@ -26,12 +22,6 @@ def print_verbose(line: str) -> None:
     """ pring_verbose """
     if VERBOSE:
         print(line)
-
-
-def normalize_data(data: List[numpy.ndarray]) -> List[numpy.ndarray]:
-    """ normalize_data """
-    data[config.NORMTEXTCOL] = data[config.TEXTCOL].apply(helper.normalize_str)
-    return data
 
 
 def main():
@@ -48,16 +38,8 @@ def main():
     pkl_filename = args.out if args.out else "model.pkl"
     data = helper.load_csv(csv_filename)
     t0 = time()
-
     # data[NORMTEXTCOL] = data[TEXTCOL].apply(helper.normalize_str)
-
-    numpartitions = (len(data) // PARTITIONLEN) + 1
-    split_data = numpy.array_split(data, numpartitions)
-    pool = multiprocessing.Pool(NUMCORES)
-    data = pandas.concat(pool.map(normalize_data, split_data))
-    pool.close()
-    pool.join()
-
+    data = helper.normalize_multiproc(data)
     print_verbose("normalization done:\t{:0.3f}s".format((time() - t0)))
     t0 = time()
     X_learn = VECTORIZER.fit_transform(data[config.NORMTEXTCOL])

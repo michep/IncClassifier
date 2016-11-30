@@ -33,7 +33,7 @@ def main():
     service_url = args.url
     test = helper.load_csv(csv_filename)
     t0 = time()
-    test[config.NORMTEXTCOL] = test[config.TEXTCOL].apply(helper.normalize_str)
+    test = helper.normalize_multiproc(test)
     print("normalization done:\t{:0.3f}s".format((time() - t0)))
     benchmark_soap_multiple(service_url, test[config.NORMTEXTCOL], test[list(config.CLASSCOLS)])
 
