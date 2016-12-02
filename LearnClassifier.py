@@ -28,10 +28,12 @@ def main():
     """ main """
     global VERBOSE
     VECTORIZER = TfidfVectorizer()
+    MODEL = {}
     apar = argparse.ArgumentParser(description="Learn Incident Classifier")
     apar.add_argument("-f", "--file", required=True)
     apar.add_argument("-o", "--out")
     apar.add_argument("-v", "--verbose", action="store_true")
+    apar.add_argument("-b", "--best", action="store_true")
     args = apar.parse_args()
     VERBOSE = args.verbose
     csv_filename = args.file
@@ -44,9 +46,9 @@ def main():
     t0 = time()
     X_learn = VECTORIZER.fit_transform(data[config.NORMTEXTCOL])
     print_verbose("fit done\t{:0.3f}s".format((time() - t0)))
-    config.MODEL["Tfidf"] = VECTORIZER
+    MODEL[config.VECTORIZERNAME] = VECTORIZER
     for classifier_name, classifier in CLASSIFIERS:
-        config.MODEL[classifier_name] = {}
+        MODEL[classifier_name] = {}
         print("="*40)
         print(classifier_name)
         print(classifier)
@@ -56,8 +58,8 @@ def main():
             y_learn = numpy.array(data[classcol])
             classifier.fit(X_learn, y_learn)
             print_verbose("training done\t{:0.3f}s".format((time() - t0)))
-            config.MODEL[classifier_name][classcol] = copy.copy(classifier)
-    helper.save_pkl(config.MODEL, pkl_filename)
+            MODEL[classifier_name][classcol] = copy.copy(classifier)
+    helper.save_pkl(MODEL, pkl_filename)
 
 if __name__ == "__main__":
     main()
