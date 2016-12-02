@@ -1,9 +1,9 @@
 """
 config module
 """
-MODEL = {}
 TEXTCOL = "Text"
 NORMTEXTCOL = "NormText"
+VECTORIZERNAME = "Tfidf"
 CLASSCOLS = ("OperCat", "ProdCat", "Impact", "Type")
 CLASSIFIER = "PassiveAggressive"
 PARTITIONLEN = 100

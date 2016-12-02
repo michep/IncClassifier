@@ -34,7 +34,7 @@ WSGI_APPLICATION = WsgiApplication(APPLICATION)
 
 if __name__ == '__main__':
     MODEL = helper.load_pkl("model.pkl")
-    VECTORIZER = MODEL["Tfidf"]
+    VECTORIZER = MODEL[config.VECTORIZERNAME]
 
     logging.basicConfig(level=logging.ERROR)
     logging.getLogger('spyne.protocol.xml').setLevel(logging.DEBUG)

@@ -45,7 +45,7 @@ def main():
     t0 = time()
     test = helper.normalize_multiproc(test)
     print("normalization done:\t{:0.3f}s".format((time() - t0)))
-    vectorizer = MODEL["Tfidf"]
+    vectorizer = MODEL[config.VECTORIZERNAME]
     X_test = vectorizer.transform(test[config.NORMTEXTCOL])
     benchmark_multiple(MODEL[config.CLASSIFIER], X_test, test[list(config.CLASSCOLS)])
 
